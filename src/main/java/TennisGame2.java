@@ -21,85 +21,100 @@ public class TennisGame2 implements TennisGame
     public String getScore(){
         String score = "";
 
-        if (this.player1Point == this.player2Point && this.player1Point < 4)
-        {
-            if (this.player1Point ==0)
-                score = "Love";
-            if (this.player1Point ==1)
-                score = "Fifteen";
-            if (this.player1Point ==2)
-                score = "Thirty";
-            score += "-All";
-        }
-        if (this.player1Point == this.player2Point && this.player1Point >=3)
-            score = "Deuce";
-
-
-
-        
-        if (this.player1Point > 0 && this.player2Point ==0)
-        {
-            if (this.player1Point ==1)
-                this.player1Response = "Fifteen";
-            if (this.player1Point ==2)
-                this.player1Response = "Thirty";
-            if (this.player1Point ==3)
-                this.player1Response = "Forty";
-
-            this.player2Response = "Love";
-            score = this.player1Response + "-" + this.player2Response;
-        }
-
-
-
-        if (this.player2Point > 0 && this.player1Point ==0)
-        {
-            if (this.player2Point ==1)
-                this.player2Response = "Fifteen";
-            if (this.player2Point ==2)
-                this.player2Response = "Thirty";
-            if (this.player2Point ==3)
-                this.player2Response = "Forty";
-
-            this.player1Response = "Love";
-            score = this.player1Response + "-" + this.player2Response;
-        }
-
-
-
-        
-        if (this.player1Point > this.player2Point && this.player1Point < 4)
-        {
-            if (this.player1Point ==2)
-                this.player1Response ="Thirty";
-            if (this.player1Point ==3)
-                this.player1Response ="Forty";
-            if (this.player2Point ==1)
-                this.player2Response ="Fifteen";
-            if (this.player2Point ==2)
-                this.player2Response ="Thirty";
-            score = this.player1Response + "-" + this.player2Response;
-        }
-
-
-
-        if (this.player2Point > this.player1Point && this.player2Point < 4)
-        {
-            if (this.player2Point ==2)
-                this.player2Response ="Thirty";
-            if (this.player2Point ==3)
-                this.player2Response ="Forty";
-            if (this.player1Point ==1)
-                this.player1Response ="Fifteen";
-            if (this.player1Point ==2)
-                this.player1Response ="Thirty";
-            score = this.player1Response + "-" + this.player2Response;
-        }
-
-
+        score = setScorePlayer1(score);
+        score = getResponseAndSetScorePlayer1(score);
+        score = getResponseAndSetScorePlayer2(score);
+        score = setScorePlayer1And2(score);
+        score = setScorePlayer2And1(score);
         score = getAdvantageOrWinScore(score);
+
         return score;
     }
+
+    private String setScorePlayer2And1(String score) {
+        if (pointPlayer2MoreThanPlayer1AndLessThanFour())
+        {
+            String[] points = {"Love", "Fifteen", "Thirty", "Forty"};
+            this.player2Response = points[this.player2Point];
+            this.player1Response = points[this.player1Point];
+
+            score = this.player1Response + "-" + this.player2Response;
+        }
+        return score;
+    }
+
+    private boolean pointPlayer2MoreThanPlayer1AndLessThanFour(){
+        return (this.player2Point > this.player1Point && this.player2Point < 4);
+    }
+
+    private String setScorePlayer1And2(String score) {
+        if (pointPlayer1MoreThanPlayer2AndLessThanFour())
+        {
+            String[] points = {"Love", "Fifteen", "Thirty", "Forty"};
+            this.player1Response = points[this.player1Point];
+            this.player2Response = points[this.player2Point];
+
+            score = this.player1Response + "-" + this.player2Response;
+        }
+        return score;
+    }
+    private boolean pointPlayer1MoreThanPlayer2AndLessThanFour(){
+        return (this.player1Point > this.player2Point && this.player1Point < 4);
+    }
+
+    private String getResponseAndSetScorePlayer2(String score) {
+        if (this.player2Point > 0 && this.player1Point ==0)
+        {
+            String[] points = {"Love", "Fifteen", "Thirty", "Forty", "Deuce"};
+            this.player2Response = points[this.player2Point];
+            this.player1Response = points[this.player1Point];
+            score = this.player1Response + "-" + this.player2Response;
+        }
+        return score;
+    }
+
+    private String getResponseAndSetScorePlayer1(String score) {
+
+        if (this.player1Point > 0 && this.player2Point ==0)
+        {
+            String[] points = {"Love", "Fifteen", "Thirty", "Forty", "Deuce"};
+            this.player1Response = points[this.player1Point];
+            this.player2Response = points[this.player2Point];
+            score = this.player1Response + "-" + this.player2Response;
+        }
+        return score;
+    }
+
+
+
+
+
+
+    private String setScorePlayer1(String score) {
+
+        if (scorePlayersEqualsAndPlayer1LessThanFour()){
+
+            String[] points = {"Love", "Fifteen", "Thirty", "Forty"};
+            score += points[this.player1Point] + "-All";
+        }
+
+        if (scorePlayersEqualsAndPlayer1LessThanThree())
+            score = "Deuce";
+
+        return score;
+    }
+
+    private boolean scorePlayersEqualsAndPlayer1LessThanFour(){
+        return (this.player1Point == this.player2Point && this.player1Point < 4);
+    }
+
+    private boolean scorePlayersEqualsAndPlayer1LessThanThree(){
+        return (this.player1Point == this.player2Point && this.player1Point >=3);
+    }
+
+
+
+
 
     private String getAdvantageOrWinScore(String score) {
         score = assignScoreAdvantageToplayer(score);
